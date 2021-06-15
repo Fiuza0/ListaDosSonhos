@@ -11,7 +11,7 @@ import java.util.List;
 public class PlaylistViewModel extends ViewModel {
 
     public List<Playlist> playlists;
-    public PlaylistRepository repository;
+    public PlaylistRepository repository = new PlaylistRepository();
 
     public void obterPlaylists(){
         playlists = repository.obterPlaylists();
