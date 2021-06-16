@@ -87,6 +87,6 @@ public class Filme implements Serializable {
     }
 
     public void loadImage(Context context, ImageView imageView ) {
-        Glide.with(context).load("https://image.tmdb.org/t/p/w500$posterPath").into(imageView);
+        Glide.with(context).load("https://image.tmdb.org/t/p/w500"+posterPath).into(imageView);
     }
 }

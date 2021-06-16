@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -14,6 +15,7 @@ import com.ucsal.listadossonhos.R;
 import com.ucsal.listadossonhos.adpter.ItemPlaylistAdapter;
 import com.ucsal.listadossonhos.model.Playlist;
 import com.ucsal.listadossonhos.repository.PlaylistRepository;
+import com.ucsal.listadossonhos.viewModel.CriarListaViewModel;
 import com.ucsal.listadossonhos.viewModel.PlaylistViewModel;
 
 import java.util.List;
@@ -24,17 +26,14 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PlaylistActivity extends AppCompatActivity {
-
+    ItemPlaylistAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         RecyclerView rvListaPlaylist = findViewById(R.id.lista_playlist_recycler_view);
         PlaylistViewModel model = new ViewModelProvider(this).get(PlaylistViewModel.class);
-        model.obterPlaylists();
-        List<Playlist> listaPlaylist = model.playlists;
-
-        ItemPlaylistAdapter adapter = new ItemPlaylistAdapter(listaPlaylist);
+        adapter = new ItemPlaylistAdapter(PlaylistRepository.listaPlaylist);
 
         rvListaPlaylist.setAdapter(adapter);
 
@@ -44,10 +43,17 @@ public class PlaylistActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(getApplicationContext(), CriarListaActivity.class));
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(adapter != null){
+            adapter.notifyDataSetChanged();
+        }
     }
 }

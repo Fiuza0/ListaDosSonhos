@@ -8,12 +8,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PlaylistRepository {
+    public static final List<Playlist> listaPlaylist= new ArrayList<Playlist>();
+    public static List<Playlist> obterPlaylists() {
+          return listaPlaylist;
 
-    public List<Playlist> obterPlaylists() {
-
-        List<Playlist> aaa = Arrays.asList(new Playlist(1, Arrays.asList(
-                new Filme(1, "aaaa"), new Filme(1, "aaaa"), new Filme(1, "aaaa")), "aaa"));
-        return aaa;
-
+    }
+    public static void adicionarPlaylist(Playlist playlist){
+        listaPlaylist.add(playlist);
     }
 }
