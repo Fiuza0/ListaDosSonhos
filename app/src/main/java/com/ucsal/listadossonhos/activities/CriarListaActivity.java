@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,35 +40,56 @@ public class CriarListaActivity extends AppCompatActivity {
         RecyclerView rvFilme = findViewById(R.id.lista_filme_recycler_view);
         CriarListaViewModel model = new ViewModelProvider(this).get(CriarListaViewModel.class);
         List<Filme> listaFilme = new ArrayList<Filme>();
-        Playlist playlist = new Playlist();
+        final Playlist playlist = new Playlist();
         playlist.setFilmes(new ArrayList<>());
-        final ItemFilmeAdapter adapter = new ItemFilmeAdapter(listaFilme, filme -> playlist.getFilmes().add(filme));
-        model.loadMovies(new Callback<FilmeRetorno>() {
-            @Override
-            public void onResponse(Call<FilmeRetorno> call, Response<FilmeRetorno> response) {
-                FilmeRetorno data = response.body();
+        EditText editText = findViewById(R.id.nome_lista_edit_text);
+        Button btn = findViewById(R.id.btn_confirmar);
 
-                if (data != null) {
-                    adapter.mFilme = data.getMovies();
-                    adapter.notifyDataSetChanged();
+        Integer idPlaylist = 0;
+        if(getIntent().getExtras() != null){
+            idPlaylist = getIntent().getExtras().getInt("idPlaylist", 0);
+        }
+
+        final ItemFilmeAdapter adapter = new ItemFilmeAdapter(
+                listaFilme, filme -> playlist.getFilmes().add(filme),idPlaylist == 0);
+
+        if(idPlaylist != 0){
+            Playlist novaPl = PlaylistRepository.obterPlaylist(idPlaylist);
+            adapter.mFilme = novaPl.getFilmes();
+            btn.setVisibility(View.GONE);
+            editText.setText(novaPl.getNome());
+            editText.setEnabled(false);
+
+
+        }else{
+            btn.setVisibility(View.VISIBLE);
+            editText.setEnabled(true);
+            model.loadMovies(new Callback<FilmeRetorno>() {
+                @Override
+                public void onResponse(Call<FilmeRetorno> call, Response<FilmeRetorno> response) {
+                    FilmeRetorno data = response.body();
+
+                    if (data != null) {
+                        adapter.mFilme = data.getMovies();
+                        adapter.notifyDataSetChanged();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<FilmeRetorno> call, Throwable t) {
+                @Override
+                public void onFailure(Call<FilmeRetorno> call, Throwable t) {
 
-            }
-        });
+                }
+            });
+        }
 
         rvFilme.setAdapter(adapter);
 
         rvFilme.setLayoutManager(new LinearLayoutManager(this));
 
-        Button btn = findViewById(R.id.btn_confirmar);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView nome = findViewById(R.id.nome_lista_edit_text);
+                EditText nome = findViewById(R.id.nome_lista_edit_text);
                 playlist.setNome(nome.getText().toString());
                 PlaylistRepository.adicionarPlaylist(playlist);
                 voltar();

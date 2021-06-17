@@ -24,10 +24,12 @@ public class ItemFilmeAdapter extends RecyclerView.Adapter<ItemFilmeAdapter.View
     public List<Filme> mFilme;
     public Function<Filme,Object>  quandoAdicionar;
     private Context context;
+    Boolean addBtn;
 
-    public ItemFilmeAdapter(List<Filme> mFilme, Function<Filme,Object> quandoAdicionar) {
+    public ItemFilmeAdapter(List<Filme> mFilme, Function<Filme,Object> quandoAdicionar,Boolean addBtn) {
         this.mFilme = mFilme;
         this.quandoAdicionar = quandoAdicionar;
+        this.addBtn = addBtn;
     }
 
     @NonNull
@@ -57,6 +59,7 @@ public class ItemFilmeAdapter extends RecyclerView.Adapter<ItemFilmeAdapter.View
         TextView textViewNota = holder.notaFilme;
         textViewNota.setText(filme.getVote_average().toString());
         holder.btnAdd.setOnClickListener(v -> quandoAdicionar.apply(filme));
+        holder.btnAdd.setVisibility(addBtn?View.VISIBLE:View.GONE);
     }
 
     @Override

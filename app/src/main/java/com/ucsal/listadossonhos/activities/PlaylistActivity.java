@@ -33,7 +33,12 @@ public class PlaylistActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         RecyclerView rvListaPlaylist = findViewById(R.id.lista_playlist_recycler_view);
         PlaylistViewModel model = new ViewModelProvider(this).get(PlaylistViewModel.class);
-        adapter = new ItemPlaylistAdapter(PlaylistRepository.listaPlaylist);
+        adapter = new ItemPlaylistAdapter(PlaylistRepository.listaPlaylist,id -> {
+            Intent intent = new Intent(getApplicationContext(),CriarListaActivity.class);
+            intent.putExtra("idPlaylist",id);
+            startActivity(intent);
+            return null;
+        });
 
         rvListaPlaylist.setAdapter(adapter);
 

@@ -27,6 +27,8 @@
         app:layout_constraintTop_toBottomOf="@id/nome_filme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layout"
+        app:layout_constraintVertical_bias="0"
         android:id="@+id/star"
         android:layout_width="25dp"
         android:layout_height="25dp"
@@ -38,6 +40,7 @@
         android:id="@+id/btn_add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/layout"
         android:background="@color/green"/>
 
     <TextView
@@ -48,4 +51,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="9.9" />
+    <View
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@android:color/darker_gray"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

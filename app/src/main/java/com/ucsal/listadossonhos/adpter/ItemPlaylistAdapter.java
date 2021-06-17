@@ -10,16 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ucsal.listadossonhos.R;
+import com.ucsal.listadossonhos.model.Filme;
 import com.ucsal.listadossonhos.model.Playlist;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class ItemPlaylistAdapter extends RecyclerView.Adapter<ItemPlaylistAdapter.ViewHolder> {
-
+    private Function<Integer,Object> quandoSelecionar;
     private List<Playlist> mPlaylist;
 
-    public ItemPlaylistAdapter(List<Playlist> mPlaylist) {
+    public ItemPlaylistAdapter(List<Playlist> mPlaylist, Function<Integer,Object> quandoSelecionar) {
         this.mPlaylist = mPlaylist;
+        this.quandoSelecionar = quandoSelecionar;
     }
 
     @NonNull
@@ -28,10 +31,9 @@ public class ItemPlaylistAdapter extends RecyclerView.Adapter<ItemPlaylistAdapte
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        // Inflate the custom layout
+
         View playlistItemView = inflater.inflate(R.layout.playlist_item, parent, false);
 
-        // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(playlistItemView);
         return viewHolder;
     }
@@ -39,8 +41,7 @@ public class ItemPlaylistAdapter extends RecyclerView.Adapter<ItemPlaylistAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Playlist playlist = mPlaylist.get(position);
-
-        // Set item views based on your views and data model
+        holder.itemView.setOnClickListener(v -> quandoSelecionar.apply(playlist.getId()));
         TextView textView = holder.nomePlaylist;
         textView.setText(playlist.getNome());
     }
